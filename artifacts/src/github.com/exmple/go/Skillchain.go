@@ -42,6 +42,10 @@ type Candidate struct {
 	
 }
 
+//UpdateCandidate struct for storing candidate updaterecord
+type UpdateCandidate struct {
+	Name string `json:"name,omitempty"`
+}
 
 //Education data struct for storing candidate records
 type Education struct{
@@ -81,20 +85,35 @@ func (t *skillChainChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Respon
 		return t.createCandidate(stub, args)
 		// createCandidate - to Create Candidate Record
 		// Creates Candidate Record with CandidateID as key.
+
 	} else if function == "queryCandidate" {
 		return t.queryCandidate(stub, args)
 		// queryCandidate - to Query Candidate Record
 		// Query Candidate Record with CandidateID as key.
+
 	} else if function =="createEducation" {
 		return t.createEducation(stub, args)
 		// createEducation - to create Education record
 		// creates Education record with educationId as key
+
 	} else if function == "queryEducation" {
 		return t.queryEducation(stub, args)
 		// queryEducation - to query education record
 		// query candidate record with educationid as key
-	}
-	
+
+	} else if function == "createExtraCertificates" {
+		return t.createExtraCertificates(stub, args)
+		// createExtraCertificates - to create Extra education record
+		// creates Extra Education record with ExtraEducationID as key
+
+	} else if function == "queryExtra" {
+		return t.queryExtra(stub, args)
+		// queryExtra - to query Extra Education Record
+		// Query Extra Education record with ExtraEducationID as key
+
+	} else if function == "updateCandidate" {
+		return t.updateCandidate(stub, args)
+	}	
 
 	logger.Errorf("unknown function name.  got: %v", args[0])
 	return shim.Error(fmt.Sprintf("unknown function name. got: %v", args[0]))

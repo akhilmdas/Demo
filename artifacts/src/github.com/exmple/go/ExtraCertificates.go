@@ -8,6 +8,7 @@
 package main
 
 import(
+	"fmt"
 	"encoding/json"
 
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -23,10 +24,10 @@ func (t *skillChainChaincode) createExtraCertificates(stub shim.ChaincodeStubInt
 		return shim.Error("Incorrect number of arguments expecting 2")
 	}
 	
-	var ExtraEducation Extra
+	var Extra ExtraEducation
 	var ExtraID string
 
-	ExtraID = args[0]
+	ExtraID = string('W') + args[0]
 
 	//checking whether the id already exist
 	ExtraReccordChecks, err := stub.GetState(ExtraID)
@@ -47,11 +48,16 @@ func (t *skillChainChaincode) createExtraCertificates(stub shim.ChaincodeStubInt
 	return shim.Success(nil)
 }
 
+
+
+// queryExtra - query extra education from candidate id as key
+// @params key
 func (t *skillChainChaincode) queryExtra(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
 	var Key string
 	var jsonResp string
 	var err error
+
 
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting a search key")
@@ -60,8 +66,7 @@ func (t *skillChainChaincode) queryExtra(stub shim.ChaincodeStubInterface, args 
 	Key = args[0]
 
 	// Get the state from the ledger
-	// patientRecords, err := stub.GetState(searchKey)
-	extraRecords, err := stub.GetState(Key)
+	extraRecord, err := stub.GetState(Key)
 
 	if err != nil {
 		jsonResp = "{\"Error\":\"Failed to get state for " + Key + "\"}"
@@ -69,16 +74,19 @@ func (t *skillChainChaincode) queryExtra(stub shim.ChaincodeStubInterface, args 
 		return shim.Error(fmt.Sprintf("Failed to get state for the key %s", Key))
 	}
 
-	if candidateRecords == nil {
+	if extraRecord == nil {
 		jsonResp = "{\"Error\":\"No data found for " + Key + "\"}"
 		logger.Infof("Query Response:%s\n", jsonResp)
 		return shim.Error(fmt.Sprintf("Failed to get state for the key %s", Key))
 	}
 
-	jsonResp = "{\"Search Key\":\"" + Key + "\",\"Data\":\"" + string(candidateRecords) + "\"}"
-	logger.Infof("Query Response: %s\n", jsonResp)
-	return shim.Success(candidateRecords)
+	
 
+	jsonResp = "{\"Search Key\":\"" + Key + "\",\"Data\":\"" + string(extraRecord) + "\"}"
+	logger.Infof("Query Response: %s\n", jsonResp)
+
+
+	return shim.Success(extraRecord)
 
 
 }

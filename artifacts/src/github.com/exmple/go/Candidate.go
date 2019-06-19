@@ -93,5 +93,44 @@ func (t *skillChainChaincode) queryCandidate(stub shim.ChaincodeStubInterface, a
 	return shim.Success(candidateRecords)
 
 
+}
 
+
+
+func (t *skillChainChaincode) updateCandidate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2 arguments to update patient record, patient id, data and user email")
+	}
+
+	var candidate Candidate
+	var UpdateCandidates UpdateCandidate
+	var key string
+
+
+	key = args[0]
+
+
+	// Get the state from the ledger
+	candidatesBytes, err := stub.GetState(key)
+
+	if err != nil || candidatesBytes == nil {
+		return shim.Error(fmt.Sprintf("No data found for the key %s",key))
+	}
+	json.Unmarshal(candidatesBytes, &candidate)
+	json.Unmarshal([]byte(args[1]), &UpdateCandidates)
+
+
+	updateCandidateAsBytes, _ := json.Marshal(UpdateCandidates)
+	json.Unmarshal(updateCandidateAsBytes, &candidate)
+	//candidate.Name = "akhil mohandas"
+	candidateAsBytes,_ := json.Marshal(candidate)
+	
+	
+	stub.PutState(key, candidateAsBytes)
+
+
+	// Transaction Response
+	logger.Infof("Update Patient Response:%s\n", string(candidateAsBytes))
+	return shim.Success(nil)
 }

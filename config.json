@@ -1,0 +1,14 @@
+{
+   "host":"ec2-13-59-254-120.us-east-2.compute.amazonaws.com",
+   "port":"7050",
+   "jwt_expiretime": "36000",
+   "channelName":"channelall",
+   "CC_SRC_PATH":"../artifacts",
+   "eventWaitTime":"30000",
+   "admins":[
+      {
+         "username":"admin",
+         "secret":"adminpw"
+      }
+   ]
+}

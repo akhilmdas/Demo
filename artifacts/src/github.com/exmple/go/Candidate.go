@@ -24,9 +24,9 @@ import (
 // @params address {address_line_1, street, city, state, country, postal_code}
 func (t *skillChainChaincode) createCandidate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
-	if len(args) !=2{
-		logger.Infof("Incorrect number of arguments. Expecting 2 arguments to create candidate record. got %s\n",string(len(args)))
-		return shim.Error("Incorrect number of arguments. Expecting 2 arguments to create candidate record.")
+	if len(args) !=3{
+		logger.Infof("Incorrect number of arguments. Expecting 3 arguments to create candidate record. got %s\n",string(len(args)))
+		return shim.Error("Incorrect number of arguments. Expecting 3 arguments to create candidate record.")
 
 	}
 
@@ -99,18 +99,20 @@ func (t *skillChainChaincode) queryCandidate(stub shim.ChaincodeStubInterface, a
 
 func (t *skillChainChaincode) updateCandidate(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2 arguments to update patient record, patient id, data and user email")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3 arguments to update candidate record, patient id, data and user email")
 	}
 
 	var candidate Candidate
 	var UpdateCandidates UpdateCandidate
 	var key string
+	var orgnization string
 
 
 	key = args[0]
+	orgnization = args[2]
 
-
+	if orgnization == "Org1" {
 	// Get the state from the ledger
 	candidatesBytes, err := stub.GetState(key)
 
@@ -123,7 +125,6 @@ func (t *skillChainChaincode) updateCandidate(stub shim.ChaincodeStubInterface, 
 
 	updateCandidateAsBytes, _ := json.Marshal(UpdateCandidates)
 	json.Unmarshal(updateCandidateAsBytes, &candidate)
-	//candidate.Name = "akhil mohandas"
 	candidateAsBytes,_ := json.Marshal(candidate)
 	
 	
@@ -131,6 +132,10 @@ func (t *skillChainChaincode) updateCandidate(stub shim.ChaincodeStubInterface, 
 
 
 	// Transaction Response
-	logger.Infof("Update Patient Response:%s\n", string(candidateAsBytes))
+	logger.Infof("Update Candidate Response:%s\n", string(candidateAsBytes))
 	return shim.Success(nil)
+} else{
+	logger.Infof("Not authorized to update the record")
+	return shim.Error("Not authorized to update the record")
+}
 }

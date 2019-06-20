@@ -26,6 +26,7 @@ const invokeChaincode = async function(peerNames, channelName, chaincodeName, fc
 	let channel = null;
 	try {
 		// first setup the client for this org
+		
 		client = await helper.getClientForOrg(org_name, username);
 		logger.debug('Successfully got the fabric client for the organization "%s"', org_name);
 		channel = client.getChannel(channelName);
@@ -153,7 +154,9 @@ const invokeChaincode = async function(peerNames, channelName, chaincodeName, fc
 				}
 			}
 		}
-	} catch (error) {
+	} 
+
+	 catch (error) {
 		logger.error('Failed to invoke due to error: ' + error.stack ? error.stack : error);
 		error_message = error.toString();
 	} finally {

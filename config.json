@@ -1,6 +1,6 @@
 {
-   "host":"ec2-13-59-254-120.us-east-2.compute.amazonaws.com",
-   "port":"7050",
+   "host":"localhost",
+   "port":"4000",
    "jwt_expiretime": "36000",
    "channelName":"channelall",
    "CC_SRC_PATH":"../artifacts",

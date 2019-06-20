@@ -42,6 +42,7 @@ type Candidate struct {
 	
 }
 
+
 //UpdateCandidate struct for storing candidate updaterecord
 type UpdateCandidate struct {
 	Name string `json:"name,omitempty"`
